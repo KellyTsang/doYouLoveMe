@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Do you love me?</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffe6e6;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        h1 {
+            color: #ff4d4d;
+            margin-bottom: 30px;
+            user-select: none;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 25px;
+            background-color: #ff4d4d;
+            color: white;
+            transition: all 0.2s ease;
+            position: absolute;
+        }
+
+        .heart {
+            position: fixed;
+            font-size: 20px;
+            color: #ff4d4d;
+            user-select: none;
+            pointer-events: none;
+            animation: floatUp 5s ease-in-out forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1.5);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Do you love me?</h1>
+    <button id="btn">No</button>
+
+    <script>
+        const btn = document.getElementById('btn');
+        let isCaught = false;
+
+        btn.addEventListener('mouseover', moveButton);
+
+        function moveButton() {
+            if (isCaught) return;
+
+            const maxX = window.innerWidth - btn.offsetWidth;
+            const maxY = window.innerHeight - btn.offsetHeight;
+
+            // Generate new position ensuring button stays within viewport
+            let newX, newY;
+            do {
+                newX = Math.random() * maxX;
+                newY = Math.random() * maxY;
+            } while (
+                // Make sure the new position is at least 100px away from current mouse position
+                Math.abs(newX - event.clientX) < 100 &&
+                Math.abs(newY - event.clientY) < 100
+            );
+
+            btn.style.left = newX + 'px';
+            btn.style.top = newY + 'px';
+        }
+
+        btn.addEventListener('click', () => {
+            isCaught = true;
+            btn.innerHTML = "Yes ❤️";
+            showLove();
+        });
+
+        function showLove() {
+            setInterval(createHeart, 300);
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.bottom = '0';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        // Set initial button position
+        btn.style.left = (window.innerWidth / 2 - btn.offsetWidth / 2) + 'px';
+        btn.style.top = (window.innerHeight / 2) + 'px';
+    </script>
+</body>
+</html>
